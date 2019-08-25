@@ -1,0 +1,804 @@
+go 101
+
+14:03 20 Mar 2018
+Tags: golang
+
+Pallat Anchaleechamaikorn
+Technical Coach @ Tech Inno
+golang developer
+
+yod.pallat@gmail.com
+https://github.com/pallat
+
+* What should you know
+.background whitebg.png
+.link https://tour.golang.org
+.link https://www.facebook.com/groups/584867114995854/ Golang Thailand
+.link https://awesome-go.com/ https://awesome-go.com/
+.link https://gobyexample.com/ https://gobyexample.com/
+.link https://golang.org/doc/ https://golang.org/doc/
+
+
+* Installing
+.background whitebg.png
+.link https://golang.org
+
+*mac/linux*
+Download file.tar.gz
+
+    ~/goroot
+
+*windows*
+Download file.zip
+
+    C:\go
+
+
+* GOROOT
+.background whitebg.png
+
+*mac/linux*
+
+    export GOROOT=~/goroot
+    export GOBIN=$GOPATH/bin
+    export PATH=$GOBIN:$GOROOT/bin:$PATH
+
+*windows*
+
+    set GOROOT=C:\go
+    set GOBIN=%GOPATH%\bin
+    set PATH=%GOBIN%;%GOROOT%\bin;%PATH%
+
+
+* GOROOT vs GOPATH
+.background whitebg.png
+
+*GOROOT* is golang sdk
+*GOPATH* for projects & third-party libraries
+
+* Project structure
+.background whitebg.png
+
+    bin/
+        hello                          # command executable
+        outyet                         # command executable
+    pkg/
+        linux_amd64/
+            github.com/golang/example/
+                stringutil.a           # package object
+    src/
+        hello/
+            hello.go               # command source
+        stringutil/
+            reverse.go             # package source
+            reverse_test.go        # test source
+        golang.org/x/image/
+            .git/                      # Git repository metadata
+        bmp/
+            reader.go              # package source
+            writer.go              # package source
+        ... (many more repositories and packages omitted) ...
+
+* editor
+.background whitebg.png
+.link https://golang.org/doc/editors.html
+
+* editor 2019
+.background whitebg.png
+.image editor2019.png 500 _
+
+* go modules
+
+.background whitebg.png
+.link https://blog.golang.org/using-go-modules
+.link https://blog.golang.org/modules2019
+
+* go modules
+
+.background whitebg.png
+go version 1.11 - 1.12
+
+    export GO111MODULE=on
+
+    the module is set to default in go 1.13
+
+* go module
+
+    go mod init
+    go list -m all
+
+* Keywords
+.background whitebg.png
+
+    break        default      func         interface    select
+    case         defer        go           map          struct
+    chan         else         goto         package      switch
+    const        fallthrough  if           range        type
+    continue     for          import       return       var
+
+
+* Hello World
+
+.background whitebg.png
+.link https://play.golang.org/
+.play hello.go
+
+* How to make it work on our machine
+
+.background whitebg.png
+    mkdir workspace/hello
+    cd workspace/hello
+    touch main.go
+    code .
+    make the hello world code in main.go
+    go run main.go
+
+* How to make it work on our machine
+
+.background whitebg.png
+    go mod init github.com/gopher/hello
+    
+
+* just add go
+
+.background whitebg.png
+
+.play killing.go
+
+* just add go
+
+.background whitebg.png
+
+.play killinggo.go
+
+* Package
+
+.background whitebg.png
+- every *.go* file must have *package* keyword on top
+- package name should same with directory name
+- any directories can only have one package, except plus _test in it
+such as
+
+    package demo
+    package demo_test 
+
+* Variable
+.background whitebg.png
+
+    var c, python, java bool
+
+    var i, j int = 1, 2
+
+    var c, python, java = true, false, "no!"
+
+    c, python, java := true, false, "no!"
+
+* Type
+.background whitebg.png
+
+basic type
+
+    bool
+
+    string
+
+    int  int8  int16  int32  int64
+
+    uint uint8 uint16 uint32 uint64 uintptr
+
+    byte  // alias for uint8
+
+    rune  // alias for int32
+          // represents a Unicode code point
+
+    float32 float64
+
+    complex64 complex128
+
+* Function
+.background whitebg.png
+
+    func abs(m float64) float64 {
+        f := float64(m)
+        if f < 0 {
+            return -f
+        }
+        return f
+    }
+
+* Function
+
+.background whitebg.png
+- func main
+- func init
+
+* Excercise
+
+.background whitebg.png
+A function get any number then returns a charactor
+
+    grade(int) string {
+        ...
+    }
+    
+    grade(100)
+
+
+* idiom
+.background whitebg.png
+
+*Good name*
+
+    short, concise, evocative
+    not be unique across all source code
+    src/encoding/base64 is imported as "encoding/base64" but has name base64,
+    not encoding_base64 and not encodingBase64
+
+    (Don't use the import . notation, which can simplify tests that must 
+    run outside the package they are testing, but should otherwise be avoided.)
+    Ex: NewRing
+
+* idiom
+.background whitebg.png
+
+*getter*
+
+    Go doesn't provide automatic support for getters and setters.
+    There's nothing wrong with providing getters and setters yourself,
+    and it's often appropriate to do so, but it's neither idiomatic 
+    nor necessary to put Get into the getter's name.
+    If you have a field called owner (lower case, unexported), 
+    the getter method should be called Owner (upper case, exported), not GetOwner.
+    The use of upper-case names for export provides the hook to discriminate the field from the method. 
+    A setter function, if needed, will likely be called SetOwner. 
+    Both names read well in practice:
+
+
+    owner := obj.Owner()
+    if owner != user {
+            obj.SetOwner(user)
+    }
+
+* Zero Value
+
+.background whitebg.png
+
+- *0*  _for_ _numeric_ _types_
+- *false* _for_ _the_ _boolean_ _type_
+- *""* (the empty string) for strings
+
+* const
+
+.background whitebg.png
+iota
+
+    iota expression is repeated by the other constants 
+    until another assignment or type declaration shows up.
+
+* if
+
+.background whitebg.png
+
+    func sqrt(x float64) string {
+        if x < 0 {
+            return sqrt(-x) + "i"
+        }
+        return fmt.Sprint(math.Sqrt(x))
+    }
+
+if {}
+if {} else {}
+if {} else if {} else {}
+
+* if statement; condition {}
+
+.background whitebg.png
+
+    func pow(x, n, lim float64) float64 {
+        if v := math.Pow(x, n); v < lim {
+            return v
+        }
+        return lim
+    }
+
+* Excercise
+
+.background whitebg.png
+A function get a score then returns grade
+
+    score 91-100 is A
+    score 81- 90 is B
+    score 71- 80 is C
+    score 61- 70 is D
+    score less than or equal 60 is F
+
+
+* for
+
+.background whitebg.png
+
+    for init; condition; post { }
+
+    for ;condition; { }
+
+    for condition { }
+
+    for { }
+
+* for is for
+
+.background whitebg.png
+.play for_for.go
+
+* while is for
+
+.background whitebg.png
+.play for_while.go
+
+* array
+
+.background whitebg.png
+
+The type [n]T
+
+.play array.go
+
+* slice []T
+
+.background whitebg.png
+    References to arrays
+    Zero value is nil
+    cap() number of elements in the underlying array
+    len() number of elements it contains
+    make([]T,len,cap)
+    append
+    Range
+    [:]
+
+* Exercise
+
+.background whitebg.png
+.link https://tour.golang.org/moretypes/18 https://tour.golang.org/moretypes/18
+
+    - for
+    - slice/array
+    - cast type
+    - first class function
+
+* Excercise
+
+.background whitebg.png
+
+.link https://people.sc.fsu.edu/~jburkardt/data/csv/csv.html https://people.sc.fsu.edu/~jburkardt/data/csv/csv.html
+    grades.csv
+
+    read that file then print out their grades
+
+* TDD Grades
+
+.background whitebg.png
+
+    0 is "F"
+    10 is "F"
+    20 is "F"
+    30 is "F"
+    40 is "F"
+    50 is "F"
+    60 is "F"
+    70 is "D"
+    80 is "C"
+    90 is "B"
+    100 is "A"
+
+* TDD Grades
+
+.background whitebg.png
+
+    51 is "F"
+    61 is "D"
+    71 is "C"
+    81 is "B"
+    91 is "A"
+
+
+* map map[T]T
+
+.background whitebg.png
+
+    Zero value is nil
+    len() number of elements it contains
+    make(map[T]T)
+    delete(m, key)
+    Range
+    Not guaranty sort
+
+
+When iterating over a map with a range loop,
+the iteration order is *not* *specified*
+and is *not* *guaranteed* to be the same from one iteration to the next.
+
+* Exercise Convert Arabic to Thai number
+
+Please use map
+
+    map[string]string {
+        "0": "๐",
+        "1": "๑",
+        "2": "๒",
+        "3": "๓",
+        "4": "๔",
+        "5": "๕",
+        "6": "๖",
+        "7": "๗",
+        "8": "๘",
+        "9": "๙",
+    }
+
+    2019-07-18 23:56:44
+    ๒๐๑๙-๐๗-๑๘ ๒๓:๕๖:๔๔
+
+* Custom Type
+.background whitebg.png
+
+    type newType T
+
+.play type_custom_primitive.go
+
+* struct
+is a type custom
+
+.background whitebg.png
+.play struct.go
+
+* struct
+represents json
+.play struct_json.go /^func main/,/END OMIT/
+
+* struct
+represents xml
+.play struct_xml.go /^	resp/,/END OMIT1/
+
+* struct
+represents xml
+.play struct_xml.go /MarshalIndent/,/_MarshalIndent/
+
+* struct
+represents xml
+.play struct_xml.go /struct1/,/_struct1/
+
+* struct
+represents xml
+.play struct_xml.go /struct2/,/_struct2/
+
+* struct
+represents xml
+.play struct_xml.go /struct3/,/_struct3/
+
+* struct
+
+.link http://opensource.adobe.com/Spry/samples/data_region/JSONDataSetSample.html#Example9 json example
+
+
+* Custom Type: func
+.background whitebg.png
+
+    type newType T
+
+.play type_custom_func.go
+
+
+* Alias Type
+.background whitebg.png
+
+    type alias = T
+
+.play type_alias.go
+
+* method
+
+.background whitebg.png
+.play struct_func.go
+
+* method
+
+.background whitebg.png
+.play struct_method.go
+
+* method on primitive type
+
+.background whitebg.png
+
+    type text string
+
+    func (t *text) set(s string) {
+        *t = text(s)
+    }
+
+    func (t *text) get() string {
+        return string(*t)
+    }
+
+    func main() {
+        var t text
+        t.set("sss")
+        fmt.Println(t.get())
+
+    }
+
+* method on function type
+
+.background whitebg.png
+
+    type text func() string
+
+    func (t text) get() string {
+        return t()
+    }
+
+    func lambda() string {
+        return "function"
+    }
+
+    func main() {
+    //	var t text = lambda
+        t := text(lambda)
+        fmt.Println(t.get())
+
+    }
+
+* Function supports
+
+.background whitebg.png
+- anonymous functions
+- closures functions
+- first-class functions
+- variadic functions
+
+* Anonymous Function
+.background whitebg.png
+.play func_anonymous.go
+
+* Closure Function
+.background whitebg.png
+.play func_closure.go
+
+* Closure Function
+.background whitebg.png
+.play func_closure_more.go /func main/,/} // END/
+
+* First-Class Function
+.background whitebg.png
+.play func_firstclass.go
+
+* method on function type
+
+.background whitebg.png
+
+    type text func() string
+
+    func (t text) get() string {
+        return t()
+    }
+
+    func lambda() string {
+        return "function"
+    }
+
+    func main() {
+    	var t text = lambda
+    //    t := text(lambda)
+        fmt.Println(t.get())
+
+    }
+
+* method on function type
+
+.background whitebg.png
+
+    type text func() string
+
+    func (t text) get() string {
+        return t()
+    }
+
+    func main() {
+        var t text = func() string {
+            return "function"
+        }
+
+        fmt.Println(t.get())
+
+    }
+
+* method on function type
+
+.background whitebg.png
+
+    type text func() string
+
+    func (t text) get() string {
+        return t()
+    }
+
+    func factory(s string) text {
+        return func() string {
+            return s
+        }
+
+    }
+
+    func main() {
+        var t text = factory("gopher")
+        fmt.Println(t.get())
+
+    }
+
+
+
+* interface
+
+.background whitebg.png
+
+empty interface
+.play interface_empty.go
+
+* interface: type assertion
+
+.background whitebg.png
+
+.play interface_assert.go
+
+* interface: type switch
+
+.background whitebg.png
+.play interface_switch.go
+
+* interface 
+
+.background whitebg.png
+
+To define a set of method signatures
+
+    Interfaces specify behaviors. 
+    An interface type defines a set 
+    of methods:
+
+
+    type areaer interface {
+        area() int
+    }
+
+
+`Interfaces` `are` `implemented` `implicitly`
+
+
+* interface: Stringer
+
+.background whitebg.png
+
+    type Stringer interface {
+        String() string
+    }
+
+* interface: error
+
+.background whitebg.png
+
+    type error interface {
+        Error() string
+    }
+
+* goroutine
+
+.background whitebg.png
+.play goroutine.go /^func main/,
+
+* goroutine
+
+.background whitebg.png
+.play gowait.go /^func main/,
+
+
+* channel 
+
+.background whitebg.png
+
+keyword `chan`
+
+    * no buffered channel
+    * buffered channel
+
+
+* buffered channel
+
+.background whitebg.png
+
+.play chanbuf.go /^func main/,
+
+* no buffered channel
+
+.background whitebg.png
+
+.play gochan.go /^func main/,
+
+
+* defer
+
+.background whitebg.png
+.play defer_simple.go
+
+* defer
+
+defer is stack
+
+.background whitebg.png
+.play defer_stack.go
+
+* defer
+.background whitebg.png
+.play defer_func.go
+
+* defer
+.background whitebg.png
+.play defer_anonymous.go
+
+* defer
+.background whitebg.png
+.play defer_panic.go
+
+* fibonacci
+.background whitebg.png
+.play fibonacci.go /^func fibonacci/,
+
+* fibonacci closure function
+.background whitebg.png
+.play fibonacci.go /^func fiboclosure/,/func fibonacci
+
+
+* fibonacci go routine
+.background whitebg.png
+.play fibonacci.go /^func fibogo/,/func fiboclosure
+
+* RESTful service with net/http
+
+.background whitebg.png
+.link https://golang.org/pkg/net/http/#example_ListenAndServe https://golang.org/pkg/net/http/#example_ListenAndServe
+
+    package main
+
+    import (
+        "io"
+        "log"
+        "net/http"
+    )
+
+    func main() {
+        // Hello world, the web server
+
+        helloHandler := func(w http.ResponseWriter, req *http.Request) {
+            io.WriteString(w, "Hello, world!\n")
+        }
+
+        http.HandleFunc("/hello", helloHandler)
+        log.Fatal(http.ListenAndServe(":8080", nil))
+    }
+
+* connect to MySQL
+
+.background whitebg.png
+.link http://go-database-sql.org/ http://go-database-sql.org/
+.link https://rfam.readthedocs.io/en/latest/database.html https://rfam.readthedocs.io/en/latest/database.html
+
+    2019/07/16 11:44:29 CL00107 Created in error. ruthe
+    2019/07/16 11:44:29 CL00109 Only one family in clan after QC for Rfam 12.0 swb
+
+
+* connect to MySQL
+
+.background whitebg.png
+.code mysql.go /func main/,/for/
+
+* connect to MySQL
+
+.background whitebg.png
+.code mysql.go /	for/,
